@@ -50,13 +50,16 @@ public class SingleHasHeadLinked<E> implements Linked<E>, Serializable {
     public void delete(int p) {
         checkElementIndex(p);
         if (p == 0) {
-            head.item = null;
+            Node<E> first = head;
             head = head.next;
+            first.item = null;
+            first.next = null;
         } else {
             Node<E> pre = node(p - 1);
             Node<E> cur = pre.next;
-            cur.item = null;
             pre.next = cur.next;
+            cur.item = null;
+            cur.next = null;
         }
         size--;
     }
