@@ -4,7 +4,7 @@ package com.ldongxu.datastructure.linked;
  * @author liudongxu06
  * @since 2020/9/4
  */
-public interface Linked<E>{
+public interface Linked<E> {
 
     int size();
 
@@ -24,4 +24,5 @@ public interface Linked<E>{
 
     E get(int index);
 
+    void clear();
 }

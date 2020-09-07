@@ -1,16 +1,18 @@
 package com.ldongxu.datastructure.linked;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 /**
  * @author liudongxu06
  * @since 2020/9/4
  */
-public class SingleHasHeadLinked<E> implements Linked<E> {
+public class SingleHasHeadLinked<E> implements Linked<E>, Serializable {
 
-    int size = 0;
-    Node<E> head;
-    Node<E> tail;
+    transient int size = 0;
+    transient Node<E> head;
+    transient Node<E> tail;
 
 
     public int size() {
@@ -48,11 +50,13 @@ public class SingleHasHeadLinked<E> implements Linked<E> {
     public void delete(int p) {
         checkElementIndex(p);
         if (p == 0) {
-            if (head != null)
-                head = head.next;
+            head.item = null;
+            head = head.next;
         } else {
             Node<E> pre = node(p - 1);
-            pre.next = pre.next.next;
+            Node<E> cur = pre.next;
+            cur.item = null;
+            pre.next = cur.next;
         }
         size--;
     }
@@ -71,7 +75,20 @@ public class SingleHasHeadLinked<E> implements Linked<E> {
     }
 
     public E get(int index) {
-        return null;
+        checkElementIndex(index);
+        return node(index).item;
+    }
+
+    public void clear() {
+        for (Node<E> x=head;x!=null;){
+            Node<E> next = x.next;
+            x.item = null;
+            x.next = null;
+            x = next;
+        }
+        head = null;
+        tail = null;
+        size = 0;
     }
 
     private void firstInsert(E data) {
@@ -79,7 +96,7 @@ public class SingleHasHeadLinked<E> implements Linked<E> {
             head = new Node<E>(data, null);
             tail = head;
         } else {
-            head.next = new Node<E>(data, head);
+            head = new Node<E>(data, head);
         }
     }
 
@@ -131,6 +148,23 @@ public class SingleHasHeadLinked<E> implements Linked<E> {
         Node(E item, Node<E> next) {
             this.item = item;
             this.next = next;
+        }
+    }
+
+    private void writeObject(java.io.ObjectOutputStream s) throws IOException {
+        s.defaultWriteObject();
+        s.writeInt(size);
+        for (Node<E> x=head;x!=null;x=x.next){
+            s.writeObject(x.item);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+        s.defaultReadObject();
+        int l = s.readInt();
+        for (int i=0;i<l;i++){
+            lastInsert((E) s.readObject());
         }
     }
 
