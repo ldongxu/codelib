@@ -14,7 +14,7 @@ public class RandomProbability<T> {
     private final TreeMap<Double, T> weightMap = new TreeMap<>();
     private Map<T,Double> weightConfigMap;
     private final Map<T,Integer> countMap =new HashMap<>();
-    private int balanceFactor = 1;
+    private int balanceFactor = 5;//动态平衡范围因子
 
     public RandomProbability(Map<T,Double> weightConfig) {
         this.weightConfigMap = weightConfig;
