@@ -1,47 +1,26 @@
 package com.ldongxu.util.jedis;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Pipeline;
-
 import java.util.List;
 
 /**
  * @author liudongxu06
- * @since 2019-06-12
+ * @since 2020/10/29
  */
-public class JedisUtil {
-
-    private JedisPool jedisPool;
-
-    public JedisUtil(JedisPool jedisPool) {
-        this.jedisPool = jedisPool;
+public final class JedisUtil {
+    private JedisUtil() {
     }
 
-    public <T> T execute(JedisExecutor<T> jedisExecutor){
-        try (Jedis jedis = jedisPool.getResource()) {
-            return jedisExecutor.execute(jedis);
-        }
+    private static JedisHandler handler = new JedisHandler(RedisConnectionManager.getJedisPool());
+
+    public static  <T> T execute(JedisExecutor<T> jedisExecutor){
+        return handler.execute(jedisExecutor);
     }
 
-    public List<Object> pipeline(List<PipelineExecutor> pipelineExecutors){
-        try (Jedis jedis = jedisPool.getResource()){
-            Pipeline pipeline = jedis.pipelined();
-            for (PipelineExecutor executor:pipelineExecutors){
-                executor.load(pipeline);
-            }
-            return pipeline.syncAndReturnAll();
-        }
+    public static List<Object> pipeline(List<PipelineExecutor> pipelineExecutors){
+        return handler.pipeline(pipelineExecutors);
     }
 
-    public List<Object> pipeline(PipelineExecutor... pipelineExecutors){
-        try (Jedis jedis = jedisPool.getResource()){
-            Pipeline pipeline = jedis.pipelined();
-            for (PipelineExecutor executor:pipelineExecutors){
-                executor.load(pipeline);
-            }
-            return pipeline.syncAndReturnAll();
-        }
+    public static List<Object> pipeline(PipelineExecutor... pipelineExecutors){
+        return handler.pipeline(pipelineExecutors);
     }
-
 }

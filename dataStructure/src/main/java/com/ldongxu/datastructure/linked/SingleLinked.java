@@ -162,7 +162,7 @@ public class SingleLinked<E> implements Linked<E>, Serializable {
         return sb.toString();
     }
 
-    private static class Node<E> {
+    public static class Node<E> {
         E item;
         Node<E> next;
 
@@ -172,8 +172,21 @@ public class SingleLinked<E> implements Linked<E>, Serializable {
         }
     }
 
+    public void reverse(){
+        Node<E> pre = null;
+        Node<E> cur = head.next;
+        while (cur!=null){
+            Node<E> next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+
+        }
+        head.next = pre;
+    }
+
     public static void main(String[] args) {
-        Linked<String> linked = new SingleLinked<String>();
+        SingleLinked<String> linked = new SingleLinked<String>();
         linked.add("a");
         linked.add("b");
         linked.add("c");
@@ -189,6 +202,10 @@ public class SingleLinked<E> implements Linked<E>, Serializable {
         linked.insert(2,"cc");
         System.out.println(linked.toString());
         System.out.println(linked.size());
+
+        linked.reverse();;
+
+        System.out.println(linked);
 
     }
 
