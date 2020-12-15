@@ -15,7 +15,7 @@ public class Solution {
     }
 
     /**
-     * 顺时针打印二位数组
+     * 顺时针打印二纬数组
      * 思路：
      * 1、空值处理
      * 2、初始化：左、右、上、下四个边界
@@ -56,6 +56,28 @@ public class Solution {
             }
             if (++l>r) break;
         }
+
+    }
+
+    @Test
+    public  void huiwen(){
+        String str = "abcddcba";
+        int length = str.length();
+        char[] chars = str.toCharArray();
+        int mid = length/2;
+        int a =0;
+        int b=chars.length-1;
+        boolean flag = true;
+        for (int i=0;i<mid;i++){
+            if (chars[a++]!=chars[b--]){
+                flag = false;
+            }
+        }
+        System.out.println(flag);
+    }
+
+    @Test
+    public void binarySearch(){
 
     }
 

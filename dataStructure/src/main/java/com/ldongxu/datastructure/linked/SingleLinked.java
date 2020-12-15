@@ -14,7 +14,8 @@ public class SingleLinked<E> implements Linked<E>, Serializable {
     transient Node<E> tail;
 
     public SingleLinked() {
-        this.head = this.tail = new Node<E>(null, null);
+        this.head =  new Node<E>(null, null);
+        this.tail = new Node<>(null,null);
     }
 
     public int size() {

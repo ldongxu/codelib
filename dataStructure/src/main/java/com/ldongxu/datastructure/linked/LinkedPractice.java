@@ -1,6 +1,5 @@
 package com.ldongxu.datastructure.linked;
 
-import java.util.LinkedList;
 
 /**
  * @author liudongxu06
@@ -48,7 +47,7 @@ public class LinkedPractice {
 
 
     public static void main(String[] args) {
-      boolean s =  new LinkedPractice().palindromeString("abcdfsedcba");
+      boolean s =  new LinkedPractice().palindromeString("abcdcba");
         System.out.println(s);
     }
 }
