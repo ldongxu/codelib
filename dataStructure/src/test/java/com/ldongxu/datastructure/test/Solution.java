@@ -77,8 +77,39 @@ public class Solution {
     }
 
     @Test
-    public void binarySearch(){
-
+    public void ipTransfor(){
+        long a = ipToLong("0.255.255.254");
+        System.out.println(a);
+        System.out.println(longToIp(a));
     }
+
+    private long ipToLong(String ip){
+        String[] arr = ip.split("\\.");
+        long a =0;
+        for(int i=0;i<arr.length;i++){
+            int subInt = Integer.parseInt(arr[i]);
+            a =(a<<8)|subInt;
+        }
+        return a;
+    }
+
+    private String longToIp(long ipInt){
+        long[] arr = new long[4];
+        for(int i=0;i<4;i++){
+            long a = ipInt & 255;
+            arr[3-i]=a;
+            ipInt = ipInt>>8;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int j=0;j<arr.length;j++){
+            sb.append(arr[j]);
+            if (j!=arr.length-1){
+               sb.append(".");
+            }
+        }
+        return sb.toString();
+    }
+
+
 
 }
