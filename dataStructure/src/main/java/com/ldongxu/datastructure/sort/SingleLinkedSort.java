@@ -1,4 +1,4 @@
-package com.ldongxu.datastructure.linked;
+package com.ldongxu.datastructure.sort;
 
 /**
  * Created by 刘东旭 on 2020/12/9.

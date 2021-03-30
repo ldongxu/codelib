@@ -2,6 +2,7 @@ package com.ldongxu.util.jedis;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.params.SetParams;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -58,7 +59,7 @@ public class RedisSynLock {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            String result = jedis.set(lockKey,requestId,SET_IF_NOT_EXIST,SET_WITH_EXPIRE_TIME_MILLISECONDS,expireTime);
+            String result = jedis.set(lockKey,requestId, SetParams.setParams().nx().px(expireTime));
             return LOCK_SUCCESS.equals(result);
         } finally {
             if (jedis!=null){

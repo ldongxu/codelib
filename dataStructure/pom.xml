@@ -33,6 +33,11 @@
         </repository>
     </repositories>
     <dependencies>
+        <dependency>
+            <artifactId>common</artifactId>
+            <groupId>com.ldongxu</groupId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- Spring -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

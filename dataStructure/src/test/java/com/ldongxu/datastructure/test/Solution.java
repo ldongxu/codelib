@@ -111,5 +111,10 @@ public class Solution {
     }
 
 
+    static class Node{
+        int val;
+        Node next;
+    }
+
 
 }

@@ -9,6 +9,7 @@
 
     <artifactId>common</artifactId>
     <packaging>jar</packaging>
+    <version>1.0.0</version>
 
     <name>common</name>
     <url>http://maven.apache.org</url>

@@ -1,4 +1,4 @@
-package com.ldongxu.datastructure.linked;
+package com.ldongxu.datastructure.sort;
 
 import java.util.Arrays;
 
