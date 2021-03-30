@@ -85,16 +85,5 @@ public class TestMain {
     }
 
 
-    public int topK(int[] a,int[] b ,int k){
-        int[] c = unitArray(a,b);
-        com.ldongxu.datastructure.linked.Heap heap =new com.ldongxu.datastructure.linked.Heap(k);
-
-
-    }
-
-    public int[] unitArray(int[] a ,int[] b){
-        for ()
-    }
-
 
 }

@@ -1,5 +1,7 @@
 package com.ldongxu.datastructure.sort;
 
+import com.ldongxu.util.gson.JsonUtil;
+
 import java.util.Arrays;
 
 /**
@@ -22,15 +24,21 @@ public class ArraySort {
                 int ai = arr[j];
                 int aj = arr[j+1];
                 if (ai>aj){
-                    swap(arr,i,j);
+                    swap(arr,j,j+1);
                     flag = true;
                 }
             }
-            if (flag) break;;
+            if (flag) break;
         }
         return arr;
     }
 
+    public int[] quickSort(){
+        if (array.length<=1) return array;
+        int[] arr = Arrays.copyOf(array,array.length);
+
+        return arr;
+    }
     private void swap(int[] arr,int i,int j){
         int tmp = arr[i];
         arr[i]=arr[j];
@@ -41,6 +49,6 @@ public class ArraySort {
         int[] arr = new int[]{5,1,2,4,6,8,7};
         ArraySort arraySort = new ArraySort(arr);
         int[] ba = arraySort.bubbleSort();
-        System.out.println();
+        System.out.println(JsonUtil.toJson(ba));
     }
 }
