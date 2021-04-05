@@ -14,12 +14,50 @@ public class SingleLinkedSort {
             node.next= new ListNode(arr[i]);
             node = node.next;
         }
-        ListNode result = new SingleLinkedSort().sortInList(node1.next);
-        while (result!=null){
-            System.out.println(result.val);
-            result=result.next;
+//        ListNode result = new SingleLinkedSort().sortInList(node1.next);
+//        while (result!=null){
+//            System.out.println(result.val);
+//            result=result.next;
+//        }
+        ListNode res = new SingleLinkedSort().mergeSort(node1.next);
+        while (res!=null){
+            System.out.println(res.val);
+            res=res.next;
         }
     }
+
+    public ListNode mergeSort(ListNode head){
+        if (head==null || head.next==null) return head;
+        //找中间节点
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next!=null && fast.next.next!=null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode mid = slow.next;
+        slow.next=null;//断开链表
+
+        ListNode left = mergeSort(head);
+        ListNode right = mergeSort(mid);
+
+        //合并链表
+        ListNode res = new ListNode(Integer.MIN_VALUE);
+        ListNode h = res;
+        while (left!=null && right!=null){
+            if (left.val<right.val){
+                h.next=left;
+                left=left.next;
+            }else {
+                h.next=right;
+                right = right.next;
+            }
+            h = h.next;
+        }
+        h.next = left==null?right:left;
+        return  res.next;
+    }
+
     public ListNode sortInList (ListNode head) {
         //用一个headPre来领起整个链表，确定链表头
         ListNode headPre = new ListNode(Integer.MIN_VALUE);
@@ -52,11 +90,11 @@ public class SingleLinkedSort {
                 rightn = node;
             }
         }
-        rightn.next=r;
-        leftn.next=p;
-        p.next=right.next;
-        pPre.next=left.next;
-        return p;
+        rightn.next=r;//过程不处理r节点，所以最后需要把r加上
+        leftn.next=p;//基准点在左链表最后一个
+        p.next=right.next;//链接左链表和右链表
+        pPre.next=left.next;//哨兵节点领起来排序的链表
+        return p;//返回基准节点
     }
 
     static class ListNode {
