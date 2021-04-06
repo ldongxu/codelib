@@ -2,6 +2,8 @@ package com.ldongxu.datastructure.tree;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * 二叉树遍历
@@ -78,6 +80,24 @@ public class BinaryTree {
         System.out.println();
     }
 
+    public void levelOrder(){
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(this.root);
+        while (!queue.isEmpty()){
+            for (int i=0;i<queue.size();i++){
+                TreeNode node = queue.remove();
+                System.out.print(node.val+",");
+                if (node.left!=null){
+                    queue.add(node.left);
+                }
+                if (node.right!=null){
+                    queue.add(node.right);
+                }
+            }
+        }
+        System.out.println();
+    }
+
     static class TreeNode{
         int val;
         TreeNode left;
@@ -102,5 +122,6 @@ public class BinaryTree {
         tree.preOrder();
         tree.inOrder();
         tree.postOrder();
+        tree.levelOrder();
     }
 }
