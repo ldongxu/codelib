@@ -1,9 +1,6 @@
 package com.ldongxu.datastructure.tree;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 二叉树遍历
@@ -98,6 +95,40 @@ public class BinaryTree {
         System.out.println();
     }
 
+    //z锯齿形层序遍历
+    public void zOrder(){
+        List<Deque<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        boolean isLeft = true;
+        while (!queue.isEmpty()){
+            Deque<Integer> deque = new LinkedList<>();
+            int size = queue.size();
+            for (int i=0;i<size;i++){
+                TreeNode node = queue.remove();
+                if (isLeft){
+                    deque.addLast(node.val);
+                }else {
+                    deque.addFirst(node.val);
+                }
+                if (node.left!=null){
+                    queue.add(node.left);
+                }
+                if (node.right!=null){
+                    queue.add(node.right);
+                }
+            }
+            res.add(deque);
+            isLeft = !isLeft;
+        }
+        for (Deque<Integer> d:res){
+            for (Integer integer:d){
+                System.out.print(integer+",");
+            }
+            System.out.println();
+        }
+    }
+
     static class TreeNode{
         int val;
         TreeNode left;
@@ -123,5 +154,6 @@ public class BinaryTree {
         tree.inOrder();
         tree.postOrder();
         tree.levelOrder();
+        tree.zOrder();
     }
 }

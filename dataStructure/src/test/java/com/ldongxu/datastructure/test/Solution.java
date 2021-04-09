@@ -1,6 +1,9 @@
 package com.ldongxu.datastructure.test;
 
+import com.ldongxu.util.gson.JsonUtil;
 import org.junit.Test;
+
+import java.util.*;
 
 /**
  * @author liudongxu06
@@ -111,10 +114,241 @@ public class Solution {
     }
 
 
-    static class Node{
-        int val;
-        Node next;
+    /**
+     * 最大的无重复字串
+     *
+     */
+    @Test
+    public void noRepeatStr(){
+        String str = "pwwkew";
+        int length = str.length();
+        int start =0;
+        int end = 0;
+        for (int i=0;i<length;i++){
+            Set<Character> set = new HashSet<>();
+            for (int j=i;j<length;j++){
+                char c = str.charAt(j);
+                if (!set.contains(c)){
+                    set.add(c);
+                    if (j-i>end-start){
+                        start=i;
+                        end=j;
+                    }
+                }else {
+                    break;
+                }
+            }
+        }
+        System.out.println(str.substring(start,end+1));
     }
 
+    /**
+     * 最大的无重复字串
+     *  滑动窗口
+     */
+    @Test
+    public void noRepeatStr2(){
+        String str = "pwwkew";
+        int length = str.length();
+        Set<Character> set = new HashSet<>();
+        int r=0;
+        int start=0;
+        int end =0;
+        for (int i=0;i<length;i++){
+            if (i!=0){
+                set.remove(str.charAt(i-1));
+            }
+            while (r<length && !set.contains(str.charAt(r))){
+                set.add(str.charAt(r));
+                r++;
+            }
+            if (r-i>end-start){
+                start = i;
+                end = r;
+            }
+        }
+
+        System.out.println(str.substring(start,end));
+    }
+
+    @Test
+    public void revertKNode(){
+        int k = 2;
+        int[] arr = new int[]{1,2,3,4,5,6,7,8,9};
+        LinkNode head = new LinkNode(0);
+        LinkNode node = head;
+        for (int a:arr){
+            node.next=new LinkNode(a);
+            node = node.next;
+        }
+
+        //k个一组反转链表
+        LinkNode r = revertKGroup(head.next,k);
+        while (r!=null){
+            System.out.print(r.val+",");
+            r=r.next;
+        }
+    }
+
+    /**
+     * k个一组反转链表
+     * @param head
+     * @param k
+     * @return
+     */
+    private LinkNode revertKGroup(LinkNode head,int k){
+        LinkNode hair = new LinkNode(0);//构造起始头
+        hair.next=head;
+        LinkNode pre = hair;
+        while (head!=null){
+            LinkNode tail = pre;
+            for (int i=0;i<k;i++){//tail走k个位置确定待反转尾部tail
+                tail = tail.next;
+                if (tail==null){
+                    return hair.next;
+                }
+            }
+            LinkNode[] t = myRevert(head,tail);//反转
+            head =t[0];//反转之后的新头
+            tail = t[1];//反转之后的新尾
+            pre.next=head;//反转之后的链表跟之前链表接起来
+            pre=tail;//下阶段新的pre节点就是反转之后的尾
+            head=tail.next;//下阶段新的head
+        }
+        return hair.next;
+    }
+    private LinkNode[] myRevert(LinkNode head,LinkNode tail){
+        LinkNode p = tail.next;
+        LinkNode n = head;
+        while (p!=tail){
+            LinkNode next  = n.next;
+            n.next=p;
+            p=n;
+            n=next;
+        }
+        return new LinkNode[]{tail,head};
+    }
+
+    static class LinkNode{
+        int val;
+        LinkNode next;
+
+        public LinkNode(int val) {
+            this.val = val;
+        }
+    }
+
+    /**
+     * 3数之和
+     *
+     * 你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
+     * 注意：答案中不可以包含重复的三元组。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/3sum
+     */
+    @Test
+    public void threeSum(){
+        int[] nums = new int[]{-1,0,1,2,-1,-4};
+        Arrays.sort(nums);
+        List<List<Integer>> lists = new ArrayList<>();
+        for (int first=0;first<nums.length;first++){
+            if (first>0 && nums[first]==nums[first-1]){
+                continue;
+            }
+            int three = nums.length-1;
+            int target = -nums[first];
+            for (int second=first+1;second<nums.length;second++){
+                if (second>first+1 && nums[second]==nums[second-1]){
+                    continue;
+                }
+                while (three>second && nums[second]+nums[three]>target){
+                    three--;
+                }
+                if (second==three){
+                    break;
+                }
+                if (nums[second]+nums[three]==target){
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[first]);
+                    list.add(nums[second]);
+                    list.add(nums[three]);
+                    lists.add(list);
+                }
+            }
+        }
+        System.out.println(JsonUtil.toJson(lists));
+    }
+
+    /**
+     * 股票最佳买卖时机
+     *
+     *定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+     * 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+     * 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock
+     */
+    @Test
+    public void maxProfit(){
+        int[] prices = new int[]{7,1,5,3,6,4};
+        int max =0;
+        int minPrice = Integer.MAX_VALUE;
+        for (int i=0;i<prices.length-1;i++){
+            if (prices[i]<minPrice){
+                minPrice = prices[i];
+            }else {
+                if (prices[i]-minPrice>max){
+                    max = prices[i]-minPrice;
+                }
+            }
+        }
+        System.out.println(max);
+    }
+
+    /**
+     * 数组中的第K个最大元素
+     * 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     */
+    @Test
+    public void findKLargest(){
+        int[] array = new int[]{3,2,3,1,2,4,5,5,6};
+        int k =4;
+        findKLargeByQuickSort(array,0,array.length-1,k);
+    }
+    private void findKLargeByQuickSort(int[] arr,int a, int b,int k){
+        if (a>=b){
+            return;
+        }
+        int p = pardition(arr,a,b);
+        if (arr.length-p==k){
+            System.out.println(arr[p]);
+            return;
+        }
+        if (arr.length-p<k){
+            findKLargeByQuickSort(arr,a,p-1,k);
+        }else {
+            findKLargeByQuickSort(arr,p+1,b,k);
+        }
+
+    }
+    private int pardition(int[] arr,int s,int e){
+        int pivot = arr[e];
+        int i=s;
+        for (int j=s;j<e;j++){
+            if (arr[j]<pivot){
+                swap(arr,i,j);
+                i++;
+            }
+        }
+        swap(arr,i,e);
+        return i;
+    }
+    private void swap(int[] arr,int i,int j){
+        int tmp = arr[i];
+        arr[i]=arr[j];
+        arr[j]=tmp;
+    }
 
 }
