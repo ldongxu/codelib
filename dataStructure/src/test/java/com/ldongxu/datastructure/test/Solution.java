@@ -11,6 +11,42 @@ import java.util.*;
  */
 public class Solution {
 
+    static class LinkNode{
+        int val;
+        LinkNode next;
+
+        public LinkNode(int val) {
+            this.val = val;
+        }
+        public static  LinkNode createLink(int[] arr){
+            LinkNode p = new LinkNode(0);
+            LinkNode node = p;
+            for (int i=0;i<arr.length;i++){
+                node.next = new LinkNode(arr[i]);
+                node = node.next;
+            }
+            return p.next;
+        }
+
+        public void print(){
+            LinkNode node = this;
+            while (node!=null){
+                System.out.print(node.val+",");
+                node = node.next;
+            }
+            System.out.println();
+        }
+    }
+
+    static class TreeNode{
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        public TreeNode(int val) {
+            this.val = val;
+        }
+    }
     @Test
     public void test1(){
         int[][] matrix = new int[][]{{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20},{21,22,23,24,25}};
@@ -229,14 +265,7 @@ public class Solution {
         return new LinkNode[]{tail,head};
     }
 
-    static class LinkNode{
-        int val;
-        LinkNode next;
 
-        public LinkNode(int val) {
-            this.val = val;
-        }
-    }
 
     /**
      * 3数之和
@@ -349,6 +378,121 @@ public class Solution {
         int tmp = arr[i];
         arr[i]=arr[j];
         arr[j]=tmp;
+    }
+
+    @Test
+    public void test(){
+        LinkNode node = new LinkNode(1);
+        node.next = new LinkNode(8);
+        node.next.next = new LinkNode(4);
+        node.next.next.next = new LinkNode(5);
+        LinkNode a = new LinkNode(4);
+        a.next=node;
+        LinkNode b = new LinkNode(5);
+        b.next = new LinkNode(6);
+        b.next.next = node;
+        LinkNode res = getIntersectionNode(a,b);
+        System.out.println(res);
+    }
+
+    public LinkNode getIntersectionNode(LinkNode headA, LinkNode headB) {
+        if(headA==null || headB==null){
+            return null;
+        }
+        LinkNode a = headA;
+        LinkNode b = headB;
+        while(a!=b){
+            a = a==null?b:a.next;
+            b= b==null?a:b.next;
+        }
+        return a;
+    }
+
+    /**
+     * 二叉树最大路径和
+     */
+    @Test
+    public void testMaxPahtSum(){
+        TreeNode root = new TreeNode(2);
+        root.left= new TreeNode(1);
+        root.right = new TreeNode(3);
+        maxPathSum(root);
+        System.out.println(val);
+    }
+    private int val = Integer.MIN_VALUE;
+    public void maxPathSum(TreeNode root) {
+        doMaxPathSum(root);
+        System.out.println(val);
+    }
+
+    private int doMaxPathSum(TreeNode root) {
+        if(root==null) return 0;
+        int left = Math.max(0,doMaxPathSum(root.left));
+        int right = Math.max(0,doMaxPathSum(root.right));
+        int three = root.val+left+right;
+        int two = root.val+Math.max(left,right);
+        val = Math.max(val,Math.max(two,three));
+        return two;
+    }
+
+    /**
+     * 排序奇升偶降链表
+     */
+    @Test
+    public void sortSpecialLink(){
+        LinkNode root = LinkNode.createLink(new int[]{1,8,3,6,5,4,7,2});
+        boolean up = true;
+        LinkNode pl1 = new LinkNode(0);
+        LinkNode pl2=new LinkNode(0);
+        LinkNode n1 = pl1;
+        LinkNode n2=pl2;
+        while (root!=null){
+            if (up){
+                n1.next = root;
+                n1=n1.next;
+            }else {
+                n2.next=root;
+                n2=n2.next;
+            }
+            root = root.next;
+            up=!up;
+        }
+        n1.next=null;
+        n2.next=null;
+
+        LinkNode ouHead = pl2.next;
+        LinkNode jiHead = pl1.next;
+
+        LinkNode ou = ouHead;
+        LinkNode pre = null;
+        while (ou!=null){
+            LinkNode nex = ou.next;
+            ou.next=pre;
+            pre=ou;
+            ou=nex;
+        }
+        ouHead = pre;
+
+        LinkNode res = new LinkNode(0);
+        LinkNode r = res;
+        while (ouHead!=null && jiHead!=null){
+            if (ouHead.val<jiHead.val){
+                r.next=ouHead;
+                ouHead=ouHead.next;
+            }else {
+                r.next=jiHead;
+                jiHead=jiHead.next;
+            }
+            r = r.next;
+        }
+        if (ouHead!=null){
+            r.next=ouHead;
+        }
+        if (jiHead!=null){
+            r.next=jiHead;
+        }
+        res.next.print();
+
     }
 
 }
