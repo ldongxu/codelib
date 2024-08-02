@@ -3,10 +3,7 @@ package com.ldongxu.util;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.ValidationException;
-import javax.validation.Validator;
+import javax.validation.*;
 import javax.validation.groups.Default;
 import java.util.Set;
 
@@ -15,7 +12,8 @@ import java.util.Set;
  * @date 2017/9/29
  */
 public class ValidationUtil {
-    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private static final Validator validator = factory.getValidator();
 
     public static <T> void validate(T obj) {
         Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
